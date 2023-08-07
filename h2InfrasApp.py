@@ -13,6 +13,9 @@ import seaborn as sns
 from datetime import date, timedelta
 import calendar
 
+#-------Version 2
+#......+by Freeman Adane, August 7
+#------------------------------------
 #Page Descriptions
 st.set_page_config(
     page_title = 'Hydrogen Infras App',
@@ -20,9 +23,13 @@ st.set_page_config(
     layout = 'wide'
 )
 #---------------------------------#
+#-----Variables to be updated....
+#----........assign a variable to data file for easy update, just change the year
+datafilename="IEA Hydrogen Projects Database 2022-Readable.xlsx"
+curr_date=date(2022,10,10) #Last download from IEA website
 @st.cache(ttl=3600,allow_output_mutation=True)
 def load_data():
-    data=pd.read_excel("IEA Hydrogen Projects Database 2021-Readable.xlsx",
+    data=pd.read_excel(datafilename,
                    sheet_name="Projects",engine="openpyxl")
     #....some clean up
     data["Announced Size"]=data["Announced Size"].astype(str) #text&no.
@@ -35,7 +42,7 @@ def load_data():
                       'Zero-carbon norm. capacity[nm³ H₂/hour]'})
     #----read country list and create dictionary for it and country code
     #.....for UX: keys-> Country name and values->ISO Code
-    country_list=pd.read_excel("IEA Hydrogen Projects Database 2021-Readable.xlsx",
+    country_list=pd.read_excel(datafilename,
                    sheet_name="Countries",engine="openpyxl")
     country_code=dict(zip(country_list['Country'],country_list['ISO-3 Code']))
     return data,country_code
@@ -51,10 +58,11 @@ def format_dec(t_var,ct):
     return tf
 #---+Trending plotting function
 def varable_plot(data_plot,var_plot,yax_tit,chart_tit):
-  data_plot = data_plot.rename(columns={'Date online(Full)':'Date'})
+  data_plot = data_plot.rename(columns={'Date online':'Date'})
   fig=px.line(data_plot,x='Date',y=var_plot,width=400, height=300)
   fig.update_layout(title='<b>'+chart_tit+'</b>',yaxis_title=yax_tit,paper_bgcolor='white',)
-  fig.update_layout(template="seaborn") 
+  fig.update_layout(template="seaborn")
+  fig.layout.yaxis.tickformat='.1f'
   return st.plotly_chart(fig)
 #---+Loading default data-World no, filteration...
 data,country_code=load_data()
@@ -70,7 +78,6 @@ with st.sidebar.header('Country Data'):
 #--------------------------------------------------------------------------------
 #Dashboard.....
 st.markdown("## Hydrogen Production Dashboard")
-curr_date=date(2021,12,27) #Last download from IEA website
 st.markdown("As of "+" **"+str(calendar.day_name[curr_date.weekday()])+"**, "+
             str(curr_date.strftime("**%B %d, %Y**")))  #** ** is for bold
 if country_name == '-':
@@ -121,7 +128,7 @@ with db2:
     #.....Trending of Number in Operation ....
     if gp_status.query('Status == "Operational"').empty is False:
         varable_plot(data.groupby(['Status']).get_group('Operational').groupby(
-        ['Date online(Full)']).count().reset_index(),'Project Name',
+        ['Date online']).count().reset_index(),'Project Name',
                  'No. of Investments','Annual Projects in Operation')
 with db3:
     st.metric("Total Capacity [ktH2/yr]",str(format_dec(data['kt H2/y'].sum(),'No')))
@@ -135,5 +142,5 @@ with db3:
     top5Tech=pd.DataFrame(gp_tech['Technology'].iloc[0:5]).assign(empt='').set_index('empt')
     st.table(top5Tech.rename(columns={'Technology':'5 Most Common Tech'}))
 
-#foot note on data source
-st.write("Data Source: IEA (2021), Hydrogen Projects Database.")
+#foot note on data source, "str" is to format the year to match other text
+st.write("Data Source: IEA (",str(curr_date.year),"), Hydrogen Projects Database.")
