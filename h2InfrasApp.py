@@ -25,7 +25,7 @@ st.set_page_config(
 #---------------------------------#
 #-----Variables to be updated....
 #----........assign a variable to data file for easy update, just change the year
-datafilename="IEA/IEA Hydrogen Production Projects Database 2023-Readable.xlsx"
+datafilename="IEA Hydrogen Production Projects Database 2023-Readable.xlsx"
 curr_date=date(2023,10,31) #Last download from IEA website
 @st.cache(ttl=3600,allow_output_mutation=True)
 def load_data():
