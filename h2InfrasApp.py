@@ -70,7 +70,8 @@ def varable_plot(data_plot,var_plot,yax_tit,chart_tit):
 #---+Loading default data-World no, filteration...
 data,country_code=load_data()
 #.......Creating country list from dictionary, add empty country
-country_list=pd.DataFrame(country_code.keys(),columns=['Country']).sort()
+country_list=pd.DataFrame(country_code.keys(),columns=['Country'])
+country_list=country_list.sort()
 no_select = pd.DataFrame([['-']], columns=['Country'])
 country_list=pd.concat([no_select,country_list])
 
