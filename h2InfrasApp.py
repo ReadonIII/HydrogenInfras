@@ -41,8 +41,8 @@ def load_data():
                      {'IEA zero-carbon estimated normalized capacity[nm³ H₂/hour]':
                       'Zero-carbon norm. capacity[nm³ H₂/hour]'})
     #.........for consistency all: FID, etc-> "Under Construction", Unknown, etc->Other 
-    data.replace('FID/Construction','Under Construction',inplace=True)
-    data.replace(to_replace=["Other/Unknown", "Unknown"],value="Other")    
+    data.replace('FID/Construction','Under construction',inplace=True)
+    data.replace('Other/Unknown', 'Other',inplace=True)    
     #----read country list and create dictionary for it and country code
     #.....for UX: keys-> Country name and values->ISO Code
     country_list=pd.read_excel(datafilename,
