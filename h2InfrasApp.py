@@ -13,20 +13,20 @@ import seaborn as sns
 from datetime import date, timedelta
 import calendar
 
-#-------Version 2
-#......+by Freeman Adane, August 7
+#-------Version 3
+#......+by Freeman Adane, August 10, 2024
 #------------------------------------
 #Page Descriptions
 st.set_page_config(
-    page_title = 'Hydrogen Infras App',
+    page_title = 'Hydrogen Production App',
     page_icon = '🚰',
     layout = 'wide'
 )
 #---------------------------------#
 #-----Variables to be updated....
 #----........assign a variable to data file for easy update, just change the year
-datafilename="IEA Hydrogen Projects Database 2022-Readable.xlsx"
-curr_date=date(2022,10,10) #Last download from IEA website
+datafilename="IEA/IEA Hydrogen Production Projects Database 2023-Readable.xlsx"
+curr_date=date(2023,10,31) #Last download from IEA website
 @st.cache(ttl=3600,allow_output_mutation=True)
 def load_data():
     data=pd.read_excel(datafilename,
