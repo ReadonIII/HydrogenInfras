@@ -76,7 +76,7 @@ country_list=pd.concat([no_select,country_list])
 
 #---+Sidebar - Specify Country
 with st.sidebar.header('Country Data'):
-    country_name = st.sidebar.selectbox('Choose a country:',country_list['Country'].tolist())
+    country_name = st.sidebar.selectbox('Choose a country:',country_list['Country'].tolist().sort())
     st.sidebar.write('**Tip**: click ✖️ when done')
 #--------------------------------------------------------------------------------
 #Dashboard.....
